@@ -1,5 +1,6 @@
 const moment = require('moment')
 const logAvg = require('../utils/logAverage')
+const fs = require('fs')
 const { sqs, inqueueURL, outqueueURL, messageGroupId } = require('../config')
 const customAlphabet = require('nanoid').customAlphabet
 const nanoid = customAlphabet('1234567890', 11)
@@ -16,9 +17,12 @@ const rcvParams = {
   VisibilityTimeout: 20, // The duration (in seconds) that the received messages are hidden from subsequent retrieve requests after being retrieved by a ReceiveMessage request
   WaitTimeSeconds: 0 // The duration (in seconds) for which the call waits for a message to arrive in the queue before returning.
 }
+
+//delete log file if it already exists
+fs.unlink('./log.txt', () => { })
 let result
 const run = async (keepRunning = true) => {
-  return new Promise(async (resolve, reject) => {
+  return new Promise(async (resolve) => {
     do {
       const receiveMessagePromise = new Promise((resolve, reject) => {
         let foundMessages = false
@@ -47,7 +51,7 @@ const run = async (keepRunning = true) => {
       })
       result = await receiveMessagePromise.catch(error => {
         console.log(error)
-        // reject(error)
+
       })
     } while (!result.Messages)
     //Enqueue enriched message & Log average
@@ -84,8 +88,8 @@ const run = async (keepRunning = true) => {
     }
 
 
-    //to keep running
-    //since the callback gets queued, and once it's resolved, it's called again, a stack overflow would never happen.
+    //to keep the service up
+    //since the async callback gets queued and once it's resolved, it's called again, a stack overflow would never happen.
     keepRunning ? run() : console.log('Service stopped.')
   })
 

@@ -14,7 +14,7 @@ describe('Computes the average number of engagements', () => {
     before(() => {
         return new Promise((resolve) => {
             //delete log file if it exists
-            fs.unlink('./log.txt', () => { })
+            fs.unlink('./log.txt', () => {})
             let params = {
                 Entries: [
                     {

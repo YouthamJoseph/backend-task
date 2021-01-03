@@ -1,5 +1,7 @@
 const ComputeEngamenetsAvgService = require('./services/ComputeEngagementsAvgService')
 const { enqueueFakeConv, randomNumber } = require('./utils/fakeGenerator')
+const { sqs, inqueueURL, outqueueURL} = require('./config')
+const yargs = require('yargs')
 
 let generateFakeConvs = true
 
@@ -16,31 +18,29 @@ const generateAtRandomIntervals = async () => {
     }
 }
 
-generateAtRandomIntervals()
-ComputeEngamenetsAvgService.run()
 
+yargs.command({
+    command: 'start',
+    describe: 'starts the service along with the generator',
+    handler() {
+        generateAtRandomIntervals()
+        ComputeEngamenetsAvgService.run()        
+    }
+})
 
+yargs.command({
+    command: 'purgeAllQueues',
+    describe: 'purges all queues to ensure consistent results. NB: Can only run once every 60 seconds',
+    handler() {
+        sqs.purgeQueue({ QueueUrl: outqueueURL }, (err) => {
+            if (err) console.log('PURGE ERROR: ' + err)
+            else console.log('OUTQUEUE purged successfully')
+        })
+        sqs.purgeQueue({ QueueUrl: inqueueURL }, (err) => {
+            if (err) console.log('PURGE ERROR: ' + err)
+            else console.log('INQUEUE purged successfully')
+        })
+    }
+})
 
-
-
-
-
-
-
-
-// const yargs = require('yargs')
-
-// yargs.command({
-//     command: 'stopGenerator',
-//     describe: 'Stops the fake generator',
-//     handler() {
-//         generateFakeConvs = false
-//     }
-// })
-// yargs.command({
-//     command: 'stopComputeAvgService',
-//     describe: 'Stops the computer average engagements service',
-//     handler() {
-//         ComputeEngamenetsAvgService.running = false
-//     }
-// })
+yargs.parse()
