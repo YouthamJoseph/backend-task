@@ -1,0 +1,54 @@
+[
+    {
+        "id": "1",
+        "type": "post",
+        "source": "facebook",
+        "link": "https://facebook.com/fake-post",
+        "username": "faker fake",
+        "engagements": {
+            "likes": 15,
+            "love": 20,
+            "haha": 40,
+            "angry": 5
+        }
+    },
+    {
+        "id": "2",
+        "type": "post",
+        "source": "facebook",
+        "link": "https://facebook.com/fake-post",
+        "username": "faker fake",
+        "engagements": {
+            "likes": 40,
+            "love": 40,
+            "haha": 10,
+            "angry": 9
+        }
+    },
+    {
+        "id": "3",
+        "type": "post",
+        "source": "facebook",
+        "link": "https://facebook.com/fake-post",
+        "username": "faker fake",
+        "engagements": {
+            "likes": 1,
+            "love": 0,
+            "haha": 0,
+            "angry": 0
+        }
+    },
+    {
+        "id": "4",
+        "type": "post",
+        "source": "facebook",
+        "link": "https://facebook.com/fake-post",
+        "username": "faker fake",
+        "engagements": {
+            "likes": 0,
+            "love": 2,
+            "haha": 5,
+            "angry": 8
+        }
+    }
+]
